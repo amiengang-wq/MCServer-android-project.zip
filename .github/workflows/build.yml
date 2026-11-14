@@ -11,16 +11,21 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - name: Znajdz folder projektu
+      - name: Rozpakuj paczke projektu (ignoruje reszte plikow w repo)
         run: |
-          S=$(find . -name settings.gradle -not -path "./.git/*" | head -1)
-          if [ -z "$S" ]; then
-            echo "BRAK settings.gradle w repo - wgraj pliki projektu. Zawartosc repo:"
-            find . -not -path "./.git/*" | head -50
+          Z=$(find . -maxdepth 1 -iname "*android-project*.zip" | head -1)
+          if [ -z "$Z" ]; then
+            echo "BRAK paczki. Wgraj MCServer-android-project.zip do GLOWNEGO katalogu repo. Zawartosc:"
+            ls -la
             exit 1
           fi
+          echo "Uzywam: $Z"
+          rm -rf _proj && mkdir _proj
+          unzip -q "$Z" -d _proj
+          S=$(find _proj -name settings.gradle | head -1)
+          if [ -z "$S" ]; then echo "W paczce nie ma settings.gradle"; find _proj | head -40; exit 1; fi
           echo "PROJ=$(dirname "$S")" >> "$GITHUB_ENV"
-          echo "Projekt w: $(dirname "$S")"
+          echo "Pliki projektu:"; (cd "$(dirname "$S")" && find . -type f | sort)
       - name: Android SDK (preinstalled on runner) - licencje i platforma 33
         run: |
           SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
