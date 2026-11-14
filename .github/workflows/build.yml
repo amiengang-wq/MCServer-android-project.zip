@@ -11,6 +11,16 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - name: Znajdz folder projektu
+        run: |
+          S=$(find . -name settings.gradle -not -path "./.git/*" | head -1)
+          if [ -z "$S" ]; then
+            echo "BRAK settings.gradle w repo - wgraj pliki projektu. Zawartosc repo:"
+            find . -not -path "./.git/*" | head -50
+            exit 1
+          fi
+          echo "PROJ=$(dirname "$S")" >> "$GITHUB_ENV"
+          echo "Projekt w: $(dirname "$S")"
       - name: Android SDK (preinstalled on runner) - licencje i platforma 33
         run: |
           SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
@@ -20,10 +30,25 @@ jobs:
         with:
           gradle-version: "7.6.4"
       - name: Pobierz JRE 8 dla Androida 4.4
-        run: bash get-jre.sh
+        run: |
+          set -e
+          W=$(mktemp -d)
+          curl -fL -o "$W/full.apk" https://github.com/Google61/PojavLauncher-android4/releases/download/ics_old/app-debug.apk
+          unzip -q "$W/full.apk" assets/components/jre/bin-arm.tar.xz -d "$W"
+          mkdir "$W/jre"
+          tar xJf "$W/assets/components/jre/bin-arm.tar.xz" -C "$W/jre"
+          cd "$W/jre"
+          rm -rf man lib/images lib/fonts lib/jfr lib/jfr.jar lib/applet lib/jvm.hprof.txt
+          rm -f lib/aarch32/client/libjsig.so
+          cp lib/aarch32/libjsig.so lib/aarch32/client/libjsig.so
+          cd "$GITHUB_WORKSPACE/$PROJ"
+          mkdir -p app/src/main/assets
+          tar --owner=0 --group=0 -C "$W/jre" -cf - . | gzip -9 > app/src/main/assets/jre8-arm.tar.gz
+          ls -la app/src/main/assets
       - name: Zbuduj APK
+        working-directory: ${{ env.PROJ }}
         run: gradle assembleDebug --no-daemon --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: MCServer-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: ${{ env.PROJ }}/app/build/outputs/apk/debug/*.apk
