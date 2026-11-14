@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="8dp">
+
+    <TextView android:id="@+id/tvIp" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:textSize="16sp"
+        android:textStyle="bold" android:text="IP: ..."/>
+    <TextView android:id="@+id/tvStatus" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Status: zatrzymany"/>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button android:id="@+id/btnInstall" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1" android:text="Instaluj"/>
+        <Button android:id="@+id/btnStart" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1" android:text="Start"/>
+        <Button android:id="@+id/btnStop" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1" android:text="Stop"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="RAM (MB): "/>
+        <EditText android:id="@+id/etRam" android:layout_width="100dp"
+            android:layout_height="wrap_content" android:inputType="number" android:text="256"/>
+    </LinearLayout>
+
+    <EditText android:id="@+id/etUrl" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:singleLine="true" android:textSize="12sp"
+        android:inputType="textUri" android:hint="(opcjonalnie) wlasny URL do JRE - domyslnie JRE 8 jest w aplikacji"/>
+
+    <ScrollView android:id="@+id/scroll" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1" android:background="#000000">
+        <TextView android:id="@+id/tvConsole" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:textColor="#00FF00"
+            android:typeface="monospace" android:textSize="11sp" android:padding="4dp"/>
+    </ScrollView>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText android:id="@+id/etCmd" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:hint="komenda (np. op nick)" android:singleLine="true"
+            android:imeOptions="actionSend"/>
+        <Button android:id="@+id/btnSend" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="Wyslij"/>
+    </LinearLayout>
+</LinearLayout>

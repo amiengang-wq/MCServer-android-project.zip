@@ -1,6 +1,6 @@
 MC Server (Android 4.4.2+, ARM 32-bit) - serwer Minecraft 1.12.2 + wbudowana Java 8
 
-BUDOWA: otworz folder w Android Studio -> Build > Build APK (potrzebny internet dla Gradle).
+BUDOWA: patrz poradnik (GitHub Actions) albo: bash get-jre.sh, potem Android Studio -> Build APK.
 APK ma ok. 41 MB - w srodku jest JRE 8 (OpenJDK 8 pod Androida API 19, z Google61/PojavLauncher-android4,
 licencja GPLv2+Classpath Exception, pliki LICENSE w tym folderze).
 
