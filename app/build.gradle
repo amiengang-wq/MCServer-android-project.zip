@@ -1,0 +1,16 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'pl.mcserver'
+    compileSdk 33
+    defaultConfig {
+        applicationId 'pl.mcserver'
+        minSdk 19
+        targetSdk 19          // 19 = brak runtime-permissions, dziala na 4.4.2
+        versionCode 1
+        versionName '1.0'
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
+    lint { abortOnError false }
+    androidResources { noCompress 'gz' }
+    dependencies { implementation 'org.tukaani:xz:1.9' }
+}
